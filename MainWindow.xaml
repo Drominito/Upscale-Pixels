@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Upscale_Pixels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="Black"
-        KeyDown="Window_KeyDown">
+        >
 
     <Window.DataContext>
         <local:MyViewModel />
@@ -29,7 +29,7 @@
                 Grid.ColumnSpan="2">
 
             <StackPanel Margin="5">
-                <Image x:Name="OutputImage"/>
+                <Image x:Name="OutputImage" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
             </StackPanel>
 
         </Border>

@@ -34,10 +34,11 @@ namespace Upscale_Pixels
     public partial class MainWindow : Window
     {
         string DropBlockText = "You can Drop the File here!";
-        private int DataShower = 0;
+        
         List<DragEventArgs> SeveralEDataList = new List<DragEventArgs>();
-        public int HistorySteps = 0;
+        
         public string MainInputImagePath = "";
+        
         public string MainOutputImagepath = "";
 
         public MainWindow()
@@ -50,123 +51,28 @@ namespace Upscale_Pixels
             ComboBoxItem comboboxitem = new ComboBoxItem();
             //comboboxitem.Content = 
             //ImagesHistory.Items = Com;
+
             DataContext = new MyViewModel();
         }
 
-
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PixelEditing.CreateBitmapIstancesAndSimilar(MainInputImagePath, MainOutputImagepath);
+            PixelEditing.CreateBitmapIstancesAndSimilar(MainInputImagePath, MainOutputImagepath, OutputImage);
 
-            UpdateImage();
         }
-
-
-
-        private void UpdateImage()
-        {
-            BitmapImage bitmapImage = new BitmapImage(new Uri(MainOutputImagepath));
-            OutputImage.Source = bitmapImage;
-        }
-        
-
-        private long GetFileSize(string filePath)
-        {
-            try
-            {
-                FileInfo fileInfo = new FileInfo(filePath);
-                return fileInfo.Length; // Die Dateigröße in Bytes
-            }
-            catch (Exception ex)
-            {
-                // Hier können Sie Fehlerbehandlung für den Fall hinzufügen, dass die Datei nicht gefunden wird oder andere Probleme auftreten
-                return -1; // Geben Sie -1 zurück, um anzuzeigen, dass ein Fehler aufgetreten ist
-            }
-        }
-
-
-
-        private void WriteDataText(DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                if (files.Length > 0)
-                {
-                    string filePath = files[0]; // Wir nehmen an, dass es sich um eine einzelne Datei handelt
-                    long ByteFileSize = GetFileSize(filePath);
-
-                    long MegaByteFileSize = GetFileSize(filePath);
-                    decimal MegaByteFileSize_Int = Convert.ToDecimal(MegaByteFileSize);
-                    MegaByteFileSize_Int /= 1000000;
-
-                    string InfoData = $"File Size:\n" +
-                                      $"{ByteFileSize}Bytes\n" +
-                                      $"{MegaByteFileSize_Int}Megabytes";
-
-                    InfoBox.Text = $"{InfoBox.Text}\n{InfoData}";
-                }
-            }
-        }
-
-
 
         private void LabelDrop_Drop(object sender, DragEventArgs e)
         {
-
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                ShowFileData(e);
-                ShowFileImage(e);
+                HistoryData.ShowFileData(e, InfoBox, SeveralEDataList);
+                MainInputImagePath = HistoryData.ShowFileImage(e, OriginalImage);
             }
-
         }
+        //private void Window_KeyDown(object sender, KeyEventArgs e) { }
+        private void LabelDrop_PreviewDrop(object sender, DragEventArgs e) { }
 
-
-
-        private void LabelDrop_PreviewDrop(object sender, DragEventArgs e)
-        {
-
-        }
-
-
-        public void ShowFileImage(DragEventArgs e)
-        {
-            string[] Files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string Path = Files[0];
-
-            BitmapImage bitmapImage = new BitmapImage(new Uri(Path));
-            OriginalImage.Source = bitmapImage;
-
-            //GetHistoryFilePath(Path);
-            HistoryData.AddInformationToHistoryFile(true, Path);
-
-            MainInputImagePath = Path; 
-        }
-
-
-
-        private void ShowFileData(DragEventArgs e)
-        {
-            SeveralEDataList.Add(e);
-            InfoBox.Text = $"";
-            WriteDataText(SeveralEDataList.Last());
-        }
     }
-
-
-
-
-
-
 
     public class MyViewModel : INotifyPropertyChanged
     {
