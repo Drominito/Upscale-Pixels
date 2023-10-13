@@ -140,10 +140,17 @@
                 </Button.Style>
             </Button>
 
+            <StackPanel Grid.Row="2">
 
-
-
-
+                <TextBlock Text="Previous Files:"
+               Foreground="White"
+               HorizontalAlignment="Center"/>
+                
+                
+                <ComboBox x:Name="ImagesHistory"
+              Margin ="10"/>
+                
+            </StackPanel>
 
         </Grid>
     </Grid>
