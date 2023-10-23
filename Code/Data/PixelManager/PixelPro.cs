@@ -6,15 +6,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
-namespace Upscale_Pixels.Code
+namespace Upscale_Pixels.Code.Data.PixelManager
 {
-    internal static class PixelEditing
+    public static class PixelPro
     {
-        
-        public static void     CreateBitmapIstancesAndSimilar(string MainInputImagePath, string MainOutputImagePath, System.Windows.Controls.Image OutputImage)
+
+        public static void CreateBitmapIstancesAndSimilar(string MainInputImagePath, string MainOutputImagePath, System.Windows.Controls.Image OutputImage)
         {
             // Wenn der Pfad kein Wert hab, oder die länge kürzer oder gleich 1 ist.
             if (MainInputImagePath == null || MainInputImagePath.Length <= 1)
@@ -49,8 +49,8 @@ namespace Upscale_Pixels.Code
 
             }
         }
-        
-        public static void     StrechPixelArrayToCustomResolution(Color[,] pixeXYInformations, int width, int height, int ScaleFactor)
+
+        public static void StrechPixelArrayToCustomResolution(Color[,] pixeXYInformations, int width, int height, int ScaleFactor)
         {
             int[] InputResolution = GetArraysCoordinateLength(pixeXYInformations);
             int InputXResolution = InputResolution[0];
@@ -72,8 +72,8 @@ namespace Upscale_Pixels.Code
             pixeXYInformations = StrechedPixeXYInformations;
 
         }
-        
-        public static void     AttemptPixelnformations(Bitmap BitMap, int Width, int Height, Color[,] PixeXYInformations) //Die wenn man die auflösung ändern will
+
+        public static void AttemptPixelnformations(Bitmap BitMap, int Width, int Height, Color[,] PixeXYInformations) //Die wenn man die auflösung ändern will
         {
             int[] OriginalXYCoordinates = GetArraysCoordinateLength(PixeXYInformations);
             int OriginalWidth = OriginalXYCoordinates[0];
@@ -113,8 +113,8 @@ namespace Upscale_Pixels.Code
                 }
             }
         }
-        
-        public static void     AttemptPixelnformations(Bitmap BitMap, Bitmap BitmapScaleInformations, Color[,] PixeXYInformations) // Die hier wenn man die Auflösung nicht ändern will
+
+        public static void AttemptPixelnformations(Bitmap BitMap, Bitmap BitmapScaleInformations, Color[,] PixeXYInformations) // Die hier wenn man die Auflösung nicht ändern will
         {
             int Width = BitmapScaleInformations.Width, Height = BitmapScaleInformations.Height;
 
@@ -143,8 +143,8 @@ namespace Upscale_Pixels.Code
             Debug.WriteLine($"False-Times : {NotAcceptedStatement}\n" +
                             $"True-Times : {AcceptedStatement}");
         }
-        
-        public static int[]    GetArraysCoordinateLength(Color[,] Array)
+
+        public static int[] GetArraysCoordinateLength(Color[,] Array)
         {
             int[] OutputArray = new int[2];
             int FirstNumberIndex = 0;
@@ -182,7 +182,7 @@ namespace Upscale_Pixels.Code
 
             return OutputArray;
         }
-        
+
         public static Color[,] CopyPixelInformations(Bitmap FileBitmap)
         {
             int OriginalWidth = FileBitmap.Width, OriginalHeight = FileBitmap.Height;
@@ -199,7 +199,7 @@ namespace Upscale_Pixels.Code
 
             return PixeXYInformations;
         }
-        
+
         public static Color[,] CopyPixelInformations(int Width, int Height, Bitmap FileBitmap)
         {
             int OriginalWidth = FileBitmap.Width, OriginalHeight = FileBitmap.Height;
@@ -208,11 +208,11 @@ namespace Upscale_Pixels.Code
 
             int AverageOriginalBitmapPixelSize = (OriginalWidth + OriginalHeight) / 2;
             int AverageWorkBitmapPixelSize = (Width + Height) / 2;
-            int ScaleFactor = (AverageWorkBitmapPixelSize / AverageOriginalBitmapPixelSize) + 1;
+            int ScaleFactor = AverageWorkBitmapPixelSize / AverageOriginalBitmapPixelSize + 1;
 
             int CenterX = Width / 2;
             int CenterY = Height / 2;
-            int Radius = (((Width + Height) / 2) / 8);
+            int Radius = (Width + Height) / 2 / 8;
 
 
             double CornerRadiusIndex = 1;
@@ -231,7 +231,7 @@ namespace Upscale_Pixels.Code
                             }
                             if (Math.Pow(x - CenterX * Math.Sin(x * y * 10) / 1, 2) + 10 < Math.Pow(y - CenterY + Math.Cos(x * y * 10) / 1, 2))
                             {
-                                PixeXYInformations[x, y] = FileBitmap.GetPixel(x / ScaleFactor, y / (ScaleFactor));
+                                PixeXYInformations[x, y] = FileBitmap.GetPixel(x / ScaleFactor, y / ScaleFactor);
                             }
 
 
@@ -244,18 +244,18 @@ namespace Upscale_Pixels.Code
 
             return PixeXYInformations;
         }
-        
-        public static void     UpdateImage(string MainOutputImagePath, System.Windows.Controls.Image OutputImage)
+
+        public static void UpdateImage(string MainOutputImagePath, System.Windows.Controls.Image OutputImage)
         {
             BitmapImage bitmapImage = new BitmapImage(new Uri(MainOutputImagePath));
             OutputImage.Source = bitmapImage;
         }
-        
-        public static string     SaveBitmap(Bitmap BitMap)
+
+        public static string SaveBitmap(Bitmap BitMap)
         {
             //var SavePath = $"{AppContext.BaseDirectory}Hallo.png";
-            string FileName    = "TestBild";
-            string ImageFormat =  ".png";
+            string FileName = "TestBild";
+            string ImageFormat = ".png";
 
             string ImagesDir = $@"{AppContext.BaseDirectory}\Images\";
             Directory.CreateDirectory(ImagesDir);

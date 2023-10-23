@@ -1,30 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using System.Xml;
-using System.Windows.Media.Effects;
-using Color = System.Drawing.Color;
-using System.Runtime.InteropServices;
-using Image = System.Drawing.Image;
-using Bitmap = System.Drawing.Bitmap;
-using System.Diagnostics;
 
 
-using Upscale_Pixels.Code;
-using Upscale_Pixels.Code.DataManagment;
+using Upscale_Pixels.Code.Data.PixelManager;
+using Upscale_Pixels.Code.Data.User;
 
 namespace Upscale_Pixels
 {
@@ -46,13 +26,16 @@ namespace Upscale_Pixels
             InitializeComponent();
             DropTextBlock.Text = DropBlockText;
 
-            HistoryData.CreateImagesHistoryPath();
+            PixelPro.CreateBitmapIstancesAndSimilar(MainInputImagePath, MainOutputImagepath, OutputImage);
 
-            ComboBoxItem comboboxitem = new ComboBoxItem();
+            
+            UserData Drominito = new UserData("Drominito");
+            // Hier wird dann in der Combobox die Namen hinzugefügt, falls es diese Datei gibt
+            
             //comboboxitem.Content = 
             //ImagesHistory.Items = Com;
 
-            DataContext = new MyViewModel();
+            //DataContext = new MyViewModel(); // MVVM werde ich erst später nutzen, und ich möchte damit besser werden ! >:(
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -74,29 +57,5 @@ namespace Upscale_Pixels
 
     }
 
-    public class MyViewModel : INotifyPropertyChanged
-    {
-        private string _MyProperty;
-        public string MyProperty
-        {
-            get => _MyProperty;
-
-            set
-            {
-                if (_MyProperty != value)
-                {
-                    _MyProperty = value;
-                    OnPropertyChanged(nameof(MyProperty));
-                }
-            }
-
-
-        }
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+    
 }

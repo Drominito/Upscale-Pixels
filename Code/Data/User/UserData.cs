@@ -7,14 +7,35 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows;
 
-namespace Upscale_Pixels.Code.DataManagment
+namespace Upscale_Pixels.Code.Data.User
 {
-    public static class HistoryData
+    internal class UserData
     {
-        public static string ImagePathFeld { get; set; }
-        public static string FilePathFeld { get; private set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserName { get; set; }
 
-        public static void   CreateImagesHistoryPath()
+        public string ImagePathFeld { get; set; }
+        public string FilePathFeld { get; private set; }
+
+
+
+        public UserData(string _UserName)
+        {
+            UserName = _UserName;
+        }
+        public UserData(string firstName, string lastName)
+        {
+            FirstName = firstName;
+
+            LastName = lastName;
+
+        }
+
+
+
+
+        public void     CreateImagesHistoryPath()
         {
             string DirectoryName = "History";
             string FileName = "ImagesHistory";
@@ -28,13 +49,13 @@ namespace Upscale_Pixels.Code.DataManagment
 
             if (File.Exists(FirstFolderPath) != true)
             {
-                
+
                 CreateFirstFolder(FirstFolderPath);
-                
+
                 FilePath = $@"{FirstFolderPath}\{FileName}{FileEnding}";
                 FilePathFeld = FilePath;
-                
-                
+
+
 
 
 
@@ -42,20 +63,16 @@ namespace Upscale_Pixels.Code.DataManagment
                 //AddInformationToHistoryFile(false, Path); // Es soll der Pfad in die Datei geschreiben werden
             }
         }
-
-        private static FileInfo CreateHistoryFileInstance(FileInfo? HistoryFileInfo, string Path)
+        public FileInfo CreateHistoryFileInstance(FileInfo? HistoryFileInfo, string Path)
         {
             HistoryFileInfo = new FileInfo(Path);
 
             return HistoryFileInfo;
         }
-
-        public static void   CreateFirstFolder(string HistoryFolderPath) { Directory.CreateDirectory(HistoryFolderPath); }
-        
-        
-        public static void   AddInformationToHistoryFile(bool Executeable, string FilePath, string ImagePath)
+        public void     CreateFirstFolder(string HistoryFolderPath) { Directory.CreateDirectory(HistoryFolderPath); }
+        public void     AddInformationToHistoryFile(bool Executeable, string FilePath, string ImagePath)
         {
-            
+
             ImagePath = ImagePath; // hmmm, vielleicht soll das Feld ein Array sein?
 
             FileInfo? WriteInformations = new FileInfo(ImagePath);
@@ -69,22 +86,20 @@ namespace Upscale_Pixels.Code.DataManagment
                     //WriteInformations = null;
                     StreamWriter sw = new StreamWriter(FilePath);
                     sw.WriteLine($"Path : {ImagePath} | Name : {FileName}");
-                    
+
                     sw.Close();
                     sw.Dispose();
                 }
 
             }
         }
-        
-        public static void   GetHistoryFilePath(string Path)
+        public void     GetHistoryFilePath(string Path)
         {
             // Das ist später für die ComboBox einzeige
             FileInfo GetFileName = new FileInfo(Path);
             string FileName = GetFileName.Name;
         }
-        
-        public static long   GetFileSize(string filePath)
+        public long     GetFileSize(string filePath)
         {
             try
             {
@@ -97,8 +112,7 @@ namespace Upscale_Pixels.Code.DataManagment
                 return -1; // Geben Sie -1 zurück, um anzuzeigen, dass ein Fehler aufgetreten ist
             }
         }
-        
-        public static void   WriteDataText(DragEventArgs e, System.Windows.Controls.TextBlock InfoBox)
+        public void     WriteDataText(DragEventArgs e, System.Windows.Controls.TextBlock InfoBox)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -121,14 +135,13 @@ namespace Upscale_Pixels.Code.DataManagment
                 }
             }
         }
-        
-        public static void   ShowFileData(DragEventArgs e, System.Windows.Controls.TextBlock InfoBox, List<DragEventArgs> SeveralEDataList)
+        public void     ShowFileData(DragEventArgs e, System.Windows.Controls.TextBlock InfoBox, List<DragEventArgs> SeveralEDataList)
         {
             SeveralEDataList.Add(e);
             InfoBox.Text = $"";
             WriteDataText(SeveralEDataList.Last(), InfoBox);
         }
-        public static string   ShowFileImage(DragEventArgs e,  System.Windows.Controls.Image OriginalImage)
+        public string   ShowFileImage(DragEventArgs e, System.Windows.Controls.Image OriginalImage)
         {
             string[] Files = (string[])e.Data.GetData(DataFormats.FileDrop);
             string ImagePath = Files[0];
@@ -143,6 +156,6 @@ namespace Upscale_Pixels.Code.DataManagment
 
             return ImagePath;
         }
-        
     }
+
 }

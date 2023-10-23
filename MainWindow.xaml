@@ -8,10 +8,7 @@
         Title="MainWindow" Height="450" Width="800" Background="Black"
         >
 
-    <Window.DataContext>
-        <local:MyViewModel />
-        <!-- Instanz der MyViewModel-Klasse als DataContext setzen -->
-    </Window.DataContext>
+    
 
     <Grid>
         <Grid.ColumnDefinitions>
